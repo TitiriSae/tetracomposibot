@@ -1,4 +1,4 @@
-import random
+from random import randint, choice
 
 robots_count = 1
 

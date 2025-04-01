@@ -1,3 +1,4 @@
+
 from robot import * 
 
 nb_robots = 0
@@ -5,7 +6,7 @@ debug = True
 
 class Robot_player(Robot):
 
-    team_name = "Braitenberg Avoider"
+    team_name = "Braitenberg_avoider"
     robot_id = -1
     iteration = 0
 
@@ -40,8 +41,16 @@ class Robot_player(Robot):
                 print ("\trobot's name (if relevant)      =",sensor_robot)
                 print ("\trobot's team (if relevant)      =",sensor_team)
 
-        translation = sensors[sensor_front]*0.5 # A MODIFIERœ
-        rotation = (-1)*(1-sensor_to_wall[sensor_front_left]) + (1)*(1-sensor_to_wall[sensor_front_right]) + choice([-1, 1])*(1-sensor_to_wall[sensor_front]) # A MODIFIER
+        translation = sensors[sensor_front]*0.3 # A MODIFIER
+        rotation_tout_droit = 0
+        rotation_hateWall = (-1)*(1-sensor_to_wall[sensor_front_left]) + (1)*(1-sensor_to_wall[sensor_front_right]) + choice([-1, 1])*(1-sensor_to_wall[sensor_front])
+        rotation_lovebot = (1)*(1-sensor_to_robot[sensor_front_left]) + (-1)*(1-sensor_to_robot[sensor_front_right]) + choice([-1, 1])*(1-sensor_to_robot[sensor_front]) # A MODIFIER
+
+        rotation = rotation_tout_droit
+        if rotation_lovebot:
+            rotation = rotation_lovebot
+        if rotation_hateWall:
+            rotation = rotation_hateWall
 
         self.iteration = self.iteration + 1        
         return translation, rotation, False

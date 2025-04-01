@@ -5,7 +5,7 @@ import arenas
 # general -- first three parameters can be overwritten with command-line arguments (cf. "python tetracomposibot.py --help")
 
 display_mode = 0
-arena = 0
+arena = 1
 position = False 
 max_iterations = 501*10 #401*500
 
@@ -20,8 +20,8 @@ display_time_stats = True
 
 # initialization : create and place robots at initial positions (returns a list containing the robots)
 
-import robot_braitenberg_hateBot as robot_strat1
-import robot_braitenberg_loveBot as robot_strat2
+import robot_subsomption as robot_strat1
+import robot_subsomption as robot_strat2
 
 def initialize_robots(arena_size=-1, particle_box=-1): # particle_box: size of the robot enclosed in a square
     x_center = arena_size // 2 - particle_box / 2
