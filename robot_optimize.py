@@ -13,13 +13,12 @@ class Robot_player(Robot):
 
     param = []
     bestParam = []
-    evaluations = 500 
     it_per_evaluation = 400
     trial = 0
 
     x_0 = 0
     y_0 = 0
-    theta_0 = 0
+    theta_0 = 0 # in [0,360]
 
     def __init__(self, x_0, y_0, theta_0, name="n/a", team="n/a",evaluations=0,it_per_evaluation=0):
         global nb_robots
@@ -29,7 +28,6 @@ class Robot_player(Robot):
         self.y_0 = y_0
         self.theta_0 = theta_0
         self.param = [random.randint(-1, 1) for i in range(8)]
-        self.evaluations = evaluations
         self.it_per_evaluation = it_per_evaluation
         super().__init__(x_0, y_0, theta_0, name=name, team=team)
 
@@ -40,14 +38,15 @@ class Robot_player(Robot):
 
         # cet exemple montre comment générer au hasard, et évaluer, des stratégies comportementales
         # Remarques:
-        # - l'évaluation est ici la somme des distances parcourues par pas de temps, mais on peut en imaginer d'autres
         # - la liste "param", définie ci-dessus, permet de stocker les paramètres de la fonction de contrôle
         # - la fonction de controle est une combinaison linéaire des senseurs, pondérés par les paramètres (c'est un "Perceptron")
 
         # toutes les X itérations: le robot est remis à sa position initiale de l'arène avec une orientation aléatoire
         if self.iteration % self.it_per_evaluation == 0:
                 if self.iteration > 0:
-                    print ("translations =",self.log_sum_of_translation,"; rotations =",self.log_sum_of_rotation)
+                    print ("\tparameters           =",self.param)
+                    print ("\ttranslations         =",self.log_sum_of_translation,"; rotations =",self.log_sum_of_rotation) # *effective* translation/rotation (ie. measured from displacement)
+                    print ("\tdistance from origin =",math.sqrt((self.x-self.x_0)**2+(self.y-self.y_0)**2))
                 self.param = [random.randint(-1, 1) for i in range(8)]
                 self.trial = self.trial + 1
                 print ("Trying strategy no.",self.trial)
