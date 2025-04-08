@@ -21,15 +21,15 @@ display_time_stats = True
 
 evaluations = 500
 it_per_evaluation = 400
-max_iterations = evaluations * it_per_evaluation + 1
+max_iterations = evaluations * it_per_evaluation + 1000000
 
 # initialization : create and place robots at initial positions (returns a list containing the robots)
 
-import robot_optimize
+import robot_randomsearch as robot
 
 def initialize_robots(arena_size=-1, particle_box=-1): # particle_box: size of the robot enclosed in a square
     x_center = arena_size // 2 - particle_box / 2
     y_center = arena_size // 2 - particle_box / 2
     robots = []
-    robots.append(robot_optimize.Robot_player(x_center, y_center, 0, name="My Robot", team="A",evaluations=evaluations,it_per_evaluation=it_per_evaluation)) # start from left: 4, y_center
+    robots.append(robot.Robot_player(x_center, y_center, 0, name="My Robot", team="A",evaluations=evaluations,it_per_evaluation=it_per_evaluation)) # start from left: 4, y_center
     return robots
