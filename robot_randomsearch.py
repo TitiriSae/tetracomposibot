@@ -34,6 +34,7 @@ class Robot_player(Robot):
 
         #####
         self.score = 0
+        self.evaluations = evaluations
         #####
 
     def reset(self):
@@ -46,13 +47,18 @@ class Robot_player(Robot):
         # - la liste "param", définie ci-dessus, permet de stocker les paramètres de la fonction de contrôle
         # - la fonction de controle est une combinaison linéaire des senseurs, pondérés par les paramètres (c'est un "Perceptron")
 
+        #####
+        self.score += translation*(1-abs(rotation))
+        #####
+
         # toutes les X itérations: le robot est remis à sa position initiale de l'arène avec une orientation aléatoire
         if self.iteration % self.it_per_evaluation == 0:
+            if self.trial <= self.evaluations:
                 #####
                 if self.trial != 1:
-                    self.bestParam = [self.score] + deepcopy(self.param)
-                else:
-                    self.bestParam = [self.score]
+                    self.bestParam = deepcopy([self.score]) + deepcopy(self.param)
+                elif self.bestParam[0] < self.score:
+                    self.bestParam = deepcopy([self.score]) + deepcopy(self.param)
                 #####
 
                 if self.iteration > 0:
@@ -64,15 +70,19 @@ class Robot_player(Robot):
                 print ("Trying strategy no.",self.trial)
                 self.iteration = self.iteration + 1
 
+                #####
+                self.score = 0
+                #####
                 return 0, 0, True # ask for reset
+            else:
+                self.param = self.bestParam[1]
+                print("BEST PARAM =", self.bestParam)
 
         # fonction de contrôle (qui dépend des entrées sensorielles, et des paramètres)
         translation = math.tanh ( self.param[0] + self.param[1] * sensors[sensor_front_left] + self.param[2] * sensors[sensor_front] + self.param[3] * sensors[sensor_front_right] )
         rotation = math.tanh ( self.param[4] + self.param[5] * sensors[sensor_front_left] + self.param[6] * sensors[sensor_front] + self.param[7] * sensors[sensor_front_right] )
 
-        #####
-        self.score += translation*(1-abs(rotation))
-        #####
+
 
         if debug == True:
             if self.iteration % 100 == 0:
