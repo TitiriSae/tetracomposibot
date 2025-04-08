@@ -4,7 +4,7 @@ import arenas
 
 # general -- first three parameters can be overwritten with command-line arguments (cf. "python tetracomposibot.py --help")
 
-display_mode = 2
+display_mode = 1
 arena = 1
 position = False 
 
@@ -19,9 +19,9 @@ display_time_stats = True
 
 # optimization
 
-evaluations = 500
+evaluations = 10
 it_per_evaluation = 400
-max_iterations = evaluations * it_per_evaluation + 1000000
+max_iterations = evaluations * it_per_evaluation + 10000
 
 # initialization : create and place robots at initial positions (returns a list containing the robots)
 
