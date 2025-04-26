@@ -25,7 +25,7 @@ max_iterations = evaluations * it_per_evaluation + 10000
 
 # initialization : create and place robots at initial positions (returns a list containing the robots)
 
-import robot_randomsearch as robot
+import randomsearch2 as robot
 
 def initialize_robots(arena_size=-1, particle_box=-1): # particle_box: size of the robot enclosed in a square
     x_center = arena_size // 2 - particle_box / 2
