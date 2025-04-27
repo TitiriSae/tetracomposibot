@@ -30,6 +30,7 @@ class Robot_player(Robot):
         self.theta_0 = theta_0
         self.param = [randint(-1, 1) for i in range(8)]
         self.it_per_evaluation = it_per_evaluation
+        self.trial_theta = 0
         super().__init__(x_0, y_0, theta_0, name=name, team=team)
 
         #####
@@ -37,13 +38,14 @@ class Robot_player(Robot):
         self.evaluations = evaluations
         self.prec_translation = 0
         self.prec_rotation = 0
+        self.prec_score = 0
         #####
 
     def reset(self):
         super().reset()
+        self.theta0 = (self.theta0 +120)%360
 
     def step(self, sensors, sensor_view=None, sensor_robot=None, sensor_team=None):
-
         # cet exemple montre comment générer au hasard, et évaluer, des stratégies comportementales
         # Remarques:
         # - la liste "param", définie ci-dessus, permet de stocker les paramètres de la fonction de contrôle
@@ -54,39 +56,40 @@ class Robot_player(Robot):
         
         if self.iteration % self.it_per_evaluation == 0:
             #####
-            if self.iteration == 0:
-                print ("Trying strategy no.",self.trial)
-                
             if self.trial < self.evaluations:
             #####
                 #####
+                
                 self.score += (self.log_sum_of_translation - self.prec_translation)*(1-abs(self.log_sum_of_rotation-self.prec_rotation))
                 if self.trial == 0:
                     self.bestParam = deepcopy([self.score]) + [deepcopy(self.param)] + [deepcopy(self.trial)]
                 elif self.bestParam[0] < self.score:
                     self.bestParam = deepcopy([self.score]) + [deepcopy(self.param)] + [deepcopy(self.trial)]
                 #####
+                if self.trial_theta % 3 == 0:
+                    if self.iteration > 0:
+                        print ("\tparameters           =",self.param)
+                        print ("\ttranslations         =",self.log_sum_of_translation,"; rotations =",self.log_sum_of_rotation) # *effective* translation/rotation (ie. measured from displacement)
+                        print ("\tdistance from origin =",math.sqrt((self.x-self.x_0)**2+(self.y-self.y_0)**2))
 
-                if self.iteration > 0:
-                    print ("\tparameters           =",self.param)
-                    print ("\ttranslations         =",self.log_sum_of_translation,"; rotations =",self.log_sum_of_rotation) # *effective* translation/rotation (ie. measured from displacement)
-                    print ("\tdistance from origin =",math.sqrt((self.x-self.x_0)**2+(self.y-self.y_0)**2))
+                        #####
+                        print("score                =",self.score)
+                        ####
 
-                    #####
-                    print ("\tscore                =",self.score)
-                    ####
+                    self.param = [randint(-1, 1) for i in range(8)]
+                    #self.param = [-1, 1, 1, 1, 0, 0, 0, 0]
+                    self.trial = self.trial + 1
+                    print ("Trying strategy no.",self.trial)
 
-                self.param = [randint(-1, 1) for i in range(8)]
-                #self.param = [-1, 1, 1, 1, 0, 0, 0, 0]
-                self.trial = self.trial + 1
-                print ("Trying strategy no.",self.trial)
+                    self.score = 0
+
                 self.iteration = self.iteration + 1
-
                 #####
                 self.reset()
-                self.score = 0
+                self.trial_theta = self.trial_theta + 1
                 self.prec_rotation = 0
                 self.prec_translation = 0
+
                 #####
 
                 return 0, 0, True # ask for resetevaluations
@@ -131,5 +134,5 @@ class Robot_player(Robot):
 
         self.prec_translation = self.log_sum_of_translation
         self.prec_rotation = self.log_sum_of_rotation
-
+        self.prec_score = self.score
         return translation, rotation, False

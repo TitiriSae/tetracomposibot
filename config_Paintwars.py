@@ -5,7 +5,7 @@ import arenas
 # general -- first three parameters can be overwritten with command-line arguments (cf. "python tetracomposibot.py --help")
 
 display_mode = 0
-arena = 1
+arena = 4
 position = False 
 max_iterations = 2001 #401*500
 
@@ -21,7 +21,7 @@ display_time_stats = False
 # initialization : create and place robots at initial positions (returns a list containing the robots)
 
 import robot_challenger
-import robot_champion
+import robot_champion as robot_champion
 
 def initialize_robots(arena_size=-1, particle_box=-1): # particle_box: size of the robot enclosed in a square
     global position
